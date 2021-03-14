@@ -8,7 +8,7 @@ client = discord.Client()
 #for add function 
 async def update_callbacks(message, msgArray):
   if message.guild.id in db.keys():
-    await message.channel.send("addings {} {} {}".format(msgArray[0],msgArray[1],msgArray[2]))
+    await message.channel.send("adding {} {} {}".format(msgArray[0],msgArray[1],msgArray[2]))
     db[message.guild.id]+=([[msgArray[0],msgArray[1],msgArray[2]]])
   else:
     await message.channel.send("adding {} {} {}".format(msgArray[0],msgArray[1],msgArray[2]))
