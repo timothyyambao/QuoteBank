@@ -9,7 +9,7 @@ client = discord.Client()
 async def update_callbacks(message, msgArray):
   if message.guild.id in db.keys():
     await message.channel.send("adding {} {} {}".format(msgArray[0],msgArray[1],msgArray[2]))
-    db[message.guild.id]+=([[msgArray[0],msgArray[1],msgArray[2]]])
+    db[message.guild.id] +=([[msgArray[0],msgArray[1],msgArray[2]]])
   else:
     await message.channel.send("adding {} {} {}".format(msgArray[0],msgArray[1],msgArray[2]))
     db[message.guild.id] = [[msgArray[0],msgArray[1],msgArray[2]]]
@@ -58,6 +58,18 @@ async def on_message(message):
       await message.channel.send('wiping all my callbacks! say bye to all these!')
       await message.channel.send(db[message.guild.id])
       del db[message.guild.id]
+
+    if message.content.startswith('$del'):
+      input = message.content[len('$del '):].split()
+      numIndex = int(input[0])-1
+
+      await message.channel.send(db[message.guild.id][numIndex])
+      valToDelete = db[message.guild.id][numIndex]
+      testList = [x for x in db[message.guild.id] if x != valToDelete]
+      del db[message.guild.id]
+      db[message.guild.id] = testList
+      await message.channel.send("new list:")
+      await message.channel.send(db[message.guild.id])
 
 keep_alive()
 client.run(os.getenv('TOKEN')) 
