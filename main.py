@@ -73,8 +73,7 @@ async def print_callbacks(message):
     #check if there is any content in server's database, if empty, prints no "callbacks"
     if message.guild.id in db.keys():
         for i in db[message.guild.id]:
-            strToOutput += '{}. {} -{}, {} \n'.format(str(indexNum), i[0],
-                                                      i[1], i[2])
+            strToOutput += '{}. {} -{}, {} \n'.format(str(indexNum), i[0], i[1], i[2])
             indexNum += 1
     else:
         await message.channel.send("CALLBACK LIST EMPTY")
