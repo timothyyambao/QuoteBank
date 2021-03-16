@@ -6,7 +6,6 @@ import random
 
 client = discord.Client()
 
-
 #add function to add callbacks to database
 async def add(message):
     input = message.content.split("\n")
