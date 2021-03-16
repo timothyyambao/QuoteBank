@@ -6,7 +6,7 @@ import random
 
 client = discord.Client()
 
-#add function to add callbacks to database
+#add function to add quotes to database
 async def add(message):
     input = message.content.split("\n")
     input.remove(input[0])
@@ -30,7 +30,7 @@ async def add(message):
         db[message.guild.id] = [[input[0], input[1], input[2]]]
 
 
-#delete function to delete callbacks from database
+#delete function to delete quotes from database
 async def delete(message):
     input = message.content[len('$del '):].split()
 
@@ -44,20 +44,20 @@ async def delete(message):
         await message.channel.send(
             "please send a delete request by listing the number you would like to delete from the list"
         )
-        await print_callbacks(message)
+        await print_quotes(message)
         await message.channel.send(
             "format your delete request by $del # \nfor example, '$del 4' would delete item #4"
         )
         return
 
-    await message.channel.send("Deleing: {}".format(
+    await message.channel.send("Deleting: {}".format(
         db[message.guild.id][numIndex]))
     valToDelete = db[message.guild.id][numIndex]
     testList = [x for x in db[message.guild.id] if x != valToDelete]
     del db[message.guild.id]
     db[message.guild.id] = testList
 
-#shows a random callback entered
+#shows a random quote entered
 async def show(message):
     index = random.randint(0, len(db[message.guild.id]) - 1)
     i = db[message.guild.id][index]
@@ -66,17 +66,17 @@ async def show(message):
 
 
 #prints list of all items in database
-async def print_callbacks(message):
+async def print_quotes(message):
     strToOutput = ''
     indexNum = 1
 
-    #check if there is any content in server's database, if empty, prints no "callbacks"
+    #check if there is any content in server's database, if empty, prints no "quotes"
     if message.guild.id in db.keys():
         for i in db[message.guild.id]:
             strToOutput += '{}. {} -{}, {} \n'.format(str(indexNum), i[0], i[1], i[2])
             indexNum += 1
     else:
-        await message.channel.send("CALLBACK LIST EMPTY")
+        await message.channel.send("QUOTE LIST EMPTY")
         return
 
     await message.channel.send(strToOutput)
@@ -101,10 +101,10 @@ async def on_message(message):
         await message.channel.send("""
           Here are my commands:
           $help - help menu
-          $add - add callback 
-          $del - delete a callback
-          $show - show a random callback
-          $all - show ALL callbacks
+          $add - add quote 
+          $del - delete a quote
+          $show - show a random quote
+          $all - show ALL quotes
           """)
 
     if message.content.startswith('$add'):
@@ -117,12 +117,12 @@ async def on_message(message):
         await show(message)
 
     if message.content.startswith('$all'):
-        await print_callbacks(message)
+        await print_quotes(message)
 
     if message.content.startswith('$clearkeys'):
         await message.channel.send(
-            'wiping all my callbacks! say bye to all these!')
-        await print_callbacks(message)
+            'wiping all my quotes! say bye to all these!')
+        await print_quotes(message)
         del db[message.guild.id]
 
 
