@@ -14,6 +14,20 @@ async def update_callbacks(message, msgArray):
     await message.channel.send("adding {} {} {}".format(msgArray[0],msgArray[1],msgArray[2]))
     db[message.guild.id] = [[msgArray[0],msgArray[1],msgArray[2]]]
 
+async def print_callbacks(message):
+  strToOutput = ''
+  indexNum = 1
+  if message.guild.id in db.keys():
+    for i in db[message.guild.id]:
+      strToOutput += '{}. {} -{}, {} \n'.format(str(indexNum),i[0],i[1],i[2])
+      indexNum += 1
+  else:
+    await message.channel.send("No callbacks")
+    return
+  
+  await message.channel.send(strToOutput)
+
+
 
 @client.event
 async def on_ready():
@@ -23,6 +37,7 @@ async def on_ready():
 async def on_message(message):
     if message.author == client.user:
         return
+    
 
     if message.content.startswith('$help'):
         await message.channel.send(
@@ -39,7 +54,8 @@ async def on_message(message):
       await message.channel.send(message.guild.id)
     
     if message.content.startswith('$add'):
-      input = message.content[len('$add '):].split("\n") 
+      input = message.content.split("\n")
+      input.remove(input[0])
       if len(input) != 3: 
         await message.channel.send("""
         Please enter new line after every input (shift + enter), Example:
@@ -51,8 +67,8 @@ async def on_message(message):
         return
       await update_callbacks(message,input)
     
-    if message.content.startswith('$show'):
-      await message.channel.send(db[message.guild.id])
+    if message.content.startswith('$all'):
+      await print_callbacks(message)
 
     if message.content.startswith('$clearkeys'):
       await message.channel.send('wiping all my callbacks! say bye to all these!')
@@ -68,8 +84,8 @@ async def on_message(message):
       testList = [x for x in db[message.guild.id] if x != valToDelete]
       del db[message.guild.id]
       db[message.guild.id] = testList
-      await message.channel.send("new list:")
-      await message.channel.send(db[message.guild.id])
+      #await message.channel.send("new list:")
+      #await print_callbacks(message)
 
 keep_alive()
 client.run(os.getenv('TOKEN')) 
