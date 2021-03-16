@@ -1,7 +1,7 @@
 import discord
 import os
 from replit import db
-from keep_alive import keep_alive
+from serverStatus import server_Status
 import random
 
 client = discord.Client()
@@ -125,5 +125,5 @@ async def on_message(message):
         del db[message.guild.id]
 
 
-keep_alive()
+server_Status()
 client.run(os.getenv('TOKEN'))
