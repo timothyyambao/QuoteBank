@@ -120,8 +120,7 @@ async def on_message(message):
         await print_quotes(message)
 
     if message.content.startswith('$clearkeys'):
-        await message.channel.send(
-            'wiping all my quotes! say bye to all these!')
+        await message.channel.send('wiping all my quotes! say bye to all these!')
         await print_quotes(message)
         del db[message.guild.id]
 
